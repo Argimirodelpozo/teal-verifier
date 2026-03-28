@@ -466,11 +466,9 @@ All data structures are bounded for SAT solver performance. Bounds are tunable v
 1. **Crypto operations**: All hash/signature operations are nondeterministic stubs -- cannot verify hash equality or signature correctness.
 2. **Nondeterministic access control**: Tests checking "unauthorized sender rejects" may be vacuously true because `asset_params_get` returns symbolic AssetManager when the asset is not pre-populated. Use `bs_assume_asset_params()` to set concrete manager addresses.
 3. **Bounded state space**: CBMC explores all paths up to the unwind bound. Use `--unwinding-assertions` to detect when the bound is insufficient.
-4. **Key hashing collisions**: `_cbmc_key_hash()` uses `len + key[0,1,6,8,17,21]` as a fingerprint. Keys sharing length AND all 6 sampled bytes will collide (extremely rare in practice).
-5. **Missing opcodes**: `sumhash512`, `falcon_verify`, `online_stake`, `voter_params_get`, `mimc` emit `//UNSUPPORTED OPCODE`. Crypto/EC ops are nondeterministic stubs.
-6. **Inner transaction fees**: Not deducted from `app_balance`.
-7. **goto-cc constraints**: No C++ lambdas; labels must be globally unique across translation units.
-8. **Slow tests**: `test_box_resize_grow`, `test_box_resize_shrink`, `test_bmath_divmod_identity` timeout at 120s (CBMC solver performance).
+4. **Missing opcodes**: `sumhash512`, `falcon_verify`, `online_stake`, `voter_params_get`, `mimc` emit `//UNSUPPORTED OPCODE`. Crypto/EC ops are nondeterministic stubs.
+5. **goto-cc constraints**: No C++ lambdas; labels must be globally unique across translation units.
+6. **Slow tests**: `test_box_resize_grow`, `test_box_resize_shrink`, `test_bmath_divmod_identity` timeout at 120s (CBMC solver performance).
 
 ## Running Tests
 
