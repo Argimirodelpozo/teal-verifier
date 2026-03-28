@@ -1,0 +1,16 @@
+#pragma version 8
+// Fixed: validate GroupSize before using gtxn
+global GroupSize
+int 2
+==
+assert
+gtxn 0 TypeEnum
+int 1
+==
+assert
+gtxn 1 Receiver
+txn Sender
+==
+assert
+int 1
+return

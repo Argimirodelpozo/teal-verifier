@@ -1,0 +1,8 @@
+#pragma version 8
+// Fixed: validate Fee <= 1000
+txn Fee
+int 1000
+<=
+assert
+int 1
+return

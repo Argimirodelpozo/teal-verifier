@@ -1,0 +1,19 @@
+name: codeql/teal-all
+version: 0.0.1-dev
+groups: teal
+extractor: teal
+dbscheme: teal.dbscheme
+upgrades: upgrades
+library: true
+dependencies:
+  codeql/controlflow: "*"
+  codeql/dataflow: "*"
+  codeql/mad: "*"
+  codeql/regex: "*"
+  codeql/ssa: "*"
+  codeql/tutorial: "*"
+  codeql/util: "*"
+dataExtensions:
+  - codeql/teal/frameworks/**/model.yml
+  - codeql/teal/frameworks/**/*.model.yml
+warnOnImplicitThis: true

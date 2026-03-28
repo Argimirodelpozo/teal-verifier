@@ -1,0 +1,8 @@
+#pragma version 8
+// Vulnerable: no RekeyTo validation — account can be rekeyed
+txn Receiver
+pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
+==
+assert
+int 1
+return

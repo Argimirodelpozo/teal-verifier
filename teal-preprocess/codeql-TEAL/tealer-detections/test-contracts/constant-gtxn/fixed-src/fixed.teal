@@ -1,0 +1,8 @@
+#pragma version 8
+// Optimized: uses txn Sender instead of gtxn 0 Sender
+txn Sender
+pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
+==
+assert
+int 1
+return

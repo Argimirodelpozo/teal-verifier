@@ -1,0 +1,8 @@
+#pragma version 8
+// Fixed: require sender == creator before allowing delete
+txn Sender
+global CreatorAddress
+==
+assert
+int 1
+return

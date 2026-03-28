@@ -1,0 +1,10 @@
+#pragma version 8
+// Fixed: reject DeleteApplication (OnCompletion == 5)
+txn OnCompletion
+int 5
+==
+bnz reject
+int 1
+return
+reject:
+err

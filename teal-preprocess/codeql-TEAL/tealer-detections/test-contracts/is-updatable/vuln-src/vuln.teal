@@ -1,0 +1,4 @@
+#pragma version 8
+// Vulnerable: no check on OnCompletion — UpdateApplication reaches approval
+int 1
+return

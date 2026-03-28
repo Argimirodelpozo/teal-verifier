@@ -1,0 +1,33 @@
+#pragma version 8
+
+// Push initial counter and accumulator
+int 0
+int 1
+
+// Loop: sum 1..5 on the stack
+loop:
+  dup
+  int 5
+  >
+  bnz done
+  dup
+  cover 2
+  +
+  swap
+  int 1
+  +
+  b loop
+
+done:
+  pop
+  callsub double
+  int 1
+  return
+
+// Subroutine: double a value
+double:
+  proto 1 1
+  frame_dig -1
+  dup
+  +
+  retsub

@@ -1,0 +1,4 @@
+name: codeql/teal-tealer-detections
+version: 0.0.1-dev
+dependencies:
+  codeql/teal-all: ${workspace}

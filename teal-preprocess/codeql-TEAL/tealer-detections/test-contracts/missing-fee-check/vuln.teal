@@ -1,0 +1,4 @@
+#pragma version 8
+// Vulnerable: no fee validation at all
+int 1
+return

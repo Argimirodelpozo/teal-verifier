@@ -1,0 +1,20 @@
+[project]
+name = "teal-verifier"
+version = "0.1.0"
+description = "Formal verification of Algorand TEAL smart contracts using CBMC"
+requires-python = ">=3.10"
+dependencies = [
+    "tree-sitter",
+    "tree-sitter-teal",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[project.scripts]
+teal-verify = "cli.verify_contract:main"

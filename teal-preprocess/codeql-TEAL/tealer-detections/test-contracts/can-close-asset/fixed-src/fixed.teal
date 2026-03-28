@@ -1,0 +1,12 @@
+#pragma version 8
+// Fixed: validate AssetCloseTo == ZeroAddress
+txn AssetCloseTo
+global ZeroAddress
+==
+assert
+txn TypeEnum
+int 4
+==
+assert
+int 1
+return

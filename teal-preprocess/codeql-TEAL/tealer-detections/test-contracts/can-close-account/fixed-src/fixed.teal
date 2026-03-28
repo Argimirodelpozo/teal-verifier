@@ -1,0 +1,12 @@
+#pragma version 8
+// Fixed: validate CloseRemainderTo == ZeroAddress
+txn CloseRemainderTo
+global ZeroAddress
+==
+assert
+txn Receiver
+pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
+==
+assert
+int 1
+return
