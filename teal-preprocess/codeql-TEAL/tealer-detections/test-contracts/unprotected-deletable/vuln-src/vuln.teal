@@ -1,5 +1,0 @@
-#pragma version 8
-// Vulnerable: app is deletable AND there is no sender == creator check
-// (anyone can delete)
-int 1
-return

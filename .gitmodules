@@ -1,3 +1,0 @@
-[submodule "teal-preprocess/codeql-TEAL"]
-	path = teal-preprocess/codeql-TEAL
-	url = https://github.com/Argimirodelpozo/codeql-TEAL.git

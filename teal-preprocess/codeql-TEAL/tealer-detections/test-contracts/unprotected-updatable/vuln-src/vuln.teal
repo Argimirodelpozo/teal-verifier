@@ -1,5 +1,0 @@
-#pragma version 8
-// Vulnerable: app is updatable AND there is no sender == creator check
-// (anyone can update)
-int 1
-return

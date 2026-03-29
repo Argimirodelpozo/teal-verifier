@@ -1,7 +1,0 @@
-name: codeql/typeflow
-version: 1.0.21-dev
-groups: shared
-library: true
-dependencies:
-  codeql/util: ${workspace}
-warnOnImplicitThis: true

@@ -1,8 +1,0 @@
-#pragma version 8
-// Unoptimized: gtxn 0 Sender instead of txn Sender
-gtxn 0 Sender
-pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
-==
-assert
-int 1
-return

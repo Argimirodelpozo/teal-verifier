@@ -1,8 +1,0 @@
-#pragma version 8
-// Optimized: uses txn Sender directly
-txn Sender
-pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
-==
-assert
-int 1
-return

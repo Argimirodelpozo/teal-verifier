@@ -1,9 +1,0 @@
-#pragma version 8
-// Unoptimized: loads own GroupIndex then uses gtxns to read own field
-txn GroupIndex
-gtxns Sender
-pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
-==
-assert
-int 1
-return

@@ -1,8 +1,0 @@
-#pragma version 8
-// Vulnerable: LogicSig that does not check AssetCloseTo
-txn TypeEnum
-int 4
-==
-assert
-int 1
-return
