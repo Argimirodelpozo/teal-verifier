@@ -1,5 +1,7 @@
 # teal-verifier
 
+> **EXPERIMENTAL**: This project is in early development and should not be relied upon for production security decisions. APIs, verification semantics, and supported opcodes may change without notice. Use at your own risk.
+
 Formal verification of Algorand TEAL smart contracts using [CBMC](https://www.cprover.org/cbmc/) (C Bounded Model Checker).
 
 ## Overview
