@@ -488,7 +488,7 @@ def main():
         # Boolean flags (flag name matches CBMC CLI flag)
         _bool_flags = [
             "trace", "stop_on_fail", "show_properties", "localize_faults",
-            "partial_loops", "no_unwinding_assertions", "slice_formula",
+            "partial_loops", "slice_formula",
             "no_standard_checks", "no_bounds_check", "no_pointer_check",
             "no_div_by_zero_check", "no_signed_overflow_check",
             "unsigned_overflow_check", "memory_leak_check",
@@ -518,13 +518,17 @@ def main():
         # Merge dev args with raw --cbmc-args
         extra = dev_args + (args.cbmc_args or [])
 
-        print(f"Running CBMC (unwind={args.unwind}, timeout={args.timeout}s)...")
+        unwinding_assertions = not args.no_unwinding_assertions
+
+        print(f"Running CBMC (unwind={args.unwind}, timeout={args.timeout}s, "
+              f"unwinding_assertions={unwinding_assertions})...")
         cbmc_result = compile_and_verify(
             generated,
             unwind=args.unwind,
             timeout=args.timeout,
             extra_args=extra if extra else None,
             property_only=args.property_only,
+            unwinding_assertions=unwinding_assertions,
             object_bits=args.object_bits,
             stream_logs=args.output_cbmc_logs,
             cleanup_goto=True,
