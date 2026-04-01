@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstring>
+// Use C headers so goto-cc avoids parsing Apple libc++ headers on macOS.
+#include <stdint.h>
+#include <string.h>
 
 // All tunable bounds are in cbmc_bounds.h (with documentation).
 // Templates override bounds with #define before including this file.
