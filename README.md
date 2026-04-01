@@ -19,7 +19,8 @@ Unlike fuzz testing or unit testing, formal verification provides mathematical g
 
 - Python 3.10+
 - [CBMC](https://www.cprover.org/cbmc/) (includes `cbmc` and `goto-cc` binaries)
-- `tree-sitter` and `tree-sitter-teal` Python packages
+- A C toolchain (needed to build `tree-sitter-teal` from source)
+- **Git** (used by `pip` to fetch `tree-sitter-teal` from GitHub)
 
 ## Installation
 
@@ -39,18 +40,28 @@ brew install cbmc
 
 Verify: `cbmc --version` and `goto-cc --version` should both work.
 
-### 2. Install teal-verifier
+### 2. Clone and install
 
 ```bash
+git clone https://github.com/Argimirodelpozo/teal-verifier.git
+cd teal-verifier
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e ".[test]"
 ```
 
-This installs `tree-sitter`, `tree-sitter-teal`, and `pytest`. After installation, the CLI is available as:
+This installs `tree-sitter`, `tree-sitter-teal`, and `pytest`.
+
+### 3. Verify the sample contract
 
 ```bash
-teal-verify contract.teal --property "true" --unwind 20
-# or equivalently:
-teal-verify contract.teal --property "true" --unwind 20
+python -m cli.verify_contract examples/counter.teal --property "true" --unwind 15 --property-only
+```
+
+If your environment exposes the CLI on `PATH`, you can also run:
+
+```bash
+teal-verify examples/counter.teal --property "true" --unwind 15 --property-only
 ```
 
 ## Walkthrough: Finding a Bug in a TEAL Contract
@@ -92,18 +103,18 @@ pushint 0
 return
 ```
 
-Save this as `counter.teal`.
+A ready-made copy is included at `examples/counter.teal`.
 
 ### 2. Sanity Check: Does It Panic?
 
 First, verify the contract doesn't crash on any input. The property `"true"` is trivially true -- this just checks for panics and assertion failures:
 
 ```bash
-teal-verify counter.teal --property "true" --unwind 15 --property-only
+teal-verify examples/counter.teal --property "true" --unwind 15 --property-only
 ```
 
 ```
-Transpiling counter.teal...
+Transpiling examples/counter.teal...
 Running CBMC (unwind=15, timeout=300s)...
 
 VERIFIED: All properties hold for all inputs (up to unwind bound 15)
@@ -116,7 +127,7 @@ The contract handles all inputs without panicking.
 Now verify something meaningful: the counter should only ever increase (monotonically non-decreasing). The property pattern is `ctx.result != ACCEPT || <condition>` -- "if the contract accepts, then the condition must hold":
 
 ```bash
-teal-verify counter.teal \
+teal-verify examples/counter.teal \
   --property 'ctx.result != ACCEPT || prop_global_int_monotonic_inc(ctx.bs_before, ctx.bs_after, "counter")' \
   --unwind 15 --property-only
 ```
@@ -132,7 +143,7 @@ CBMC exhaustively explored all possible inputs and confirmed: the counter never 
 Now let's check a property that should **fail**. Suppose this contract is meant to be read-only for unauthorized callers, and we want to verify that no global state changes. We use `prop_all_globals_unchanged`:
 
 ```bash
-teal-verify counter.teal \
+teal-verify examples/counter.teal \
   --property 'ctx.result != ACCEPT || prop_all_globals_unchanged(ctx.bs_before, ctx.bs_after)' \
   --unwind 15 --property-only --stop-on-fail
 ```
@@ -153,7 +164,7 @@ CBMC found a counterexample: **any** caller can invoke the contract, it accepts,
 Add `--trace` to see the exact execution path CBMC used to violate the property:
 
 ```bash
-teal-verify counter.teal \
+teal-verify examples/counter.teal \
   --property 'ctx.result != ACCEPT || prop_all_globals_unchanged(ctx.bs_before, ctx.bs_after)' \
   --unwind 15 --property-only --stop-on-fail --trace
 ```
