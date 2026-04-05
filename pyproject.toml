@@ -1,11 +1,17 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "teal-verifier"
 version = "0.1.0"
 description = "Formal verification of Algorand TEAL smart contracts using CBMC"
 requires-python = ">=3.10"
+readme = "README.md"
 dependencies = [
-    "tree-sitter",
-    "tree-sitter-teal",
+    "tree-sitter>=0.24",
+    # Algorand TEAL grammar (not published on PyPI); installs from source with a C extension.
+    "tree-sitter-teal @ git+https://github.com/Argimirodelpozo/tree-sitter-teal.git",
 ]
 
 [project.optional-dependencies]
@@ -18,3 +24,7 @@ markers = [
 
 [project.scripts]
 teal-verify = "cli.verify_contract:main"
+
+# `engine/` is C++/CBMC headers only — exclude it from Python package discovery.
+[tool.setuptools.packages.find]
+include = ["cli*", "cbmc_transpiler*", "template_generator*"]
