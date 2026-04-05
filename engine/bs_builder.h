@@ -27,7 +27,7 @@
 // Requires: cbmc_avm.h, cbmc_opcodes.h already included.
 //           extern "C" { uint64_t nondet_uint64(); ... } declared.
 
-#include <cstring>
+#include <string.h>
 
 // ===========================================================================
 // BlockchainState Builder — Initial State Assumptions

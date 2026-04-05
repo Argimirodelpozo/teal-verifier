@@ -1,0 +1,28 @@
+#pragma version 10
+txn ApplicationID
+bz create
+txn OnCompletion
+pushint 0
+==
+bz reject
+
+// Increment counter
+pushbytes "counter"
+pushbytes "counter"
+app_global_get
+pushint 1
++
+app_global_put
+pushint 1
+return
+
+create:
+pushbytes "counter"
+pushint 0
+app_global_put
+pushint 1
+return
+
+reject:
+pushint 0
+return
