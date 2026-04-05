@@ -199,6 +199,15 @@ def main():
              "drop unused functions for performance)",
     )
     parser.add_argument(
+        "--solver",
+        type=str,
+        default=None,
+        choices=["minisat", "cadical", "kissat", "z3", "bitwuzla", "cvc5"],
+        help="SAT/SMT solver backend (default: minisat). "
+             "SMT solvers (z3, bitwuzla, cvc5) can be 2-5x faster for "
+             "arithmetic-heavy contracts.",
+    )
+    parser.add_argument(
         "--object-bits",
         type=int,
         default=None,
@@ -515,13 +524,24 @@ def main():
             if val is not None:
                 dev_args.extend([f"--{cbmc_flag}", str(val)])
 
+        # Map --solver to CBMC flags
+        if args.solver:
+            _smt_solvers = {"z3", "bitwuzla", "cvc5"}
+            _sat_solvers = {"cadical", "kissat"}
+            if args.solver in _smt_solvers:
+                dev_args.append(f"--{args.solver}")
+            elif args.solver in _sat_solvers:
+                dev_args.extend(["--sat-solver", args.solver])
+            # minisat is CBMC's default — no flag needed
+
         # Merge dev args with raw --cbmc-args
         extra = dev_args + (args.cbmc_args or [])
 
         unwinding_assertions = not args.no_unwinding_assertions
 
+        solver_info = f", solver={args.solver}" if args.solver else ""
         print(f"Running CBMC (unwind={args.unwind}, timeout={args.timeout}s, "
-              f"unwinding_assertions={unwinding_assertions})...")
+              f"unwinding_assertions={unwinding_assertions}{solver_info})...")
         cbmc_result = compile_and_verify(
             generated,
             unwind=args.unwind,

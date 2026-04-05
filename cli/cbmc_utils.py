@@ -42,6 +42,7 @@ def compile_and_verify(
     unwinding_assertions: bool = True,
     object_bits: int | None = 10,
     trace: bool = False,
+    solver: str | None = None,
     extra_args: list[str] | None = None,
     stream_logs: bool = False,
     cleanup_goto: bool = False,
@@ -57,6 +58,8 @@ def compile_and_verify(
         unwinding_assertions: Warn when unwind bound is insufficient.
         object_bits: CBMC --object-bits value. None omits the flag.
         trace: Pass --trace to CBMC for counterexample extraction.
+        solver: SAT/SMT solver backend. One of: minisat, cadical, kissat,
+            z3, bitwuzla, cvc5. None uses CBMC's default (minisat).
         extra_args: Additional raw arguments to pass to CBMC.
         stream_logs: Stream CBMC output to console in real time.
         cleanup_goto: Delete the GOTO binary after verification.
@@ -129,6 +132,14 @@ def compile_and_verify(
             verify_cmd.append("--slice-formula")
     if trace:
         verify_cmd.append("--trace")
+    if solver:
+        _smt_solvers = {"z3", "bitwuzla", "cvc5"}
+        _sat_solvers = {"cadical", "kissat"}
+        if solver in _smt_solvers:
+            verify_cmd.append(f"--{solver}")
+        elif solver in _sat_solvers:
+            verify_cmd.extend(["--sat-solver", solver])
+        # minisat is CBMC's default — no flag needed
     if stream_logs:
         verify_cmd.extend(["--verbosity", "9", "--timestamp", "monotonic", "--flush"])
     if extra_args:

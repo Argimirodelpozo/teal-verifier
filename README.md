@@ -421,6 +421,35 @@ teal-verify contract.teal --property "..." \
   --trace --stop-on-fail --verbose
 ```
 
+### Solver Selection
+
+By default, CBMC uses **MiniSat2** (SAT). The `--solver` flag lets you switch to an SMT or alternative SAT backend, which can dramatically change performance depending on the contract:
+
+```bash
+# Use Z3 (SMT) — good all-rounder for arithmetic-heavy contracts
+teal-verify contract.teal --property "..." --solver z3
+
+# Use Bitwuzla (SMT) — fastest for bitvector-heavy verification
+teal-verify contract.teal --property "..." --solver bitwuzla
+
+# Use CaDiCaL (SAT) — modern CDCL solver, often faster than MiniSat
+teal-verify contract.teal --property "..." --solver cadical
+```
+
+| Solver | Type | Strengths | Weaknesses | Install |
+|--------|------|-----------|------------|---------|
+| `minisat` | SAT | CBMC default, no extra install, reliable | Slower on 64-bit arithmetic and large byte operations | Built into CBMC |
+| `cadical` | SAT | Modern CDCL solver, faster on many SAT instances, good clause learning | Marginal improvement on arithmetic-heavy problems | `apt install cadical` or build from source |
+| `kissat` | SAT | Competition-winning SAT solver, excellent on hard combinatorial instances | Similar to CaDiCaL; less tested with CBMC | Build from [source](https://github.com/arminbiere/kissat) |
+| `z3` | SMT | Native bitvector reasoning, good all-rounder, handles arithmetic well | Higher per-query overhead than SAT solvers, slower on pure boolean problems | `apt install z3` / `brew install z3` |
+| `bitwuzla` | SMT | State-of-the-art bitvector solver, best for fixed-width arithmetic (mul, div, mod) | Less mature CBMC integration, may not support all CBMC features | Build from [source](https://bitwuzla.github.io/) |
+| `cvc5` | SMT | Strong on quantifiers and arrays, good theory combination | Slower than Bitwuzla on pure bitvector problems, higher memory usage | `apt install cvc5` or build from [source](https://cvc5.github.io/) |
+
+**When to switch solvers:**
+- Multiplication overflow checks, `bmath_*` operations, `exp` → try `bitwuzla` or `z3`
+- Large state spaces with many globals/boxes → try `cadical`
+- Timeouts with default solver → try `z3` first (best overall improvement for TEAL verification)
+
 ### Python API
 
 ```python
