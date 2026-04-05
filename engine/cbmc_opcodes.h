@@ -2310,15 +2310,17 @@ void asset_params_get(Stack& s, BlockchainState& BS, uint64_t field) {
             case 0: pushint(s, ap->total); break;        // AssetTotal
             case 1: pushint(s, ap->decimals); break;     // AssetDecimals
             case 2: pushint(s, ap->default_frozen ? 1 : 0); break; // AssetDefaultFrozen
+            case 3: stack_push(s, sv_bytes(ap->unit_name, ap->unit_name_len)); break; // AssetUnitName
+            case 4: stack_push(s, sv_bytes(ap->name, ap->name_len)); break;           // AssetName
+            case 5: stack_push(s, sv_bytes(ap->url, ap->url_len)); break;             // AssetURL
+            case 6: stack_push(s, sv_bytes(ap->metadata_hash, 32)); break;            // AssetMetadataHash
             case 7: stack_push(s, sv_bytes(ap->manager, 32)); break;  // AssetManager
             case 8: stack_push(s, sv_bytes(ap->reserve, 32)); break;  // AssetReserve
             case 9: stack_push(s, sv_bytes(ap->freeze, 32)); break;   // AssetFreeze
             case 10: stack_push(s, sv_bytes(ap->clawback, 32)); break; // AssetClawback
             case 11: stack_push(s, sv_bytes(ap->creator, 32)); break;  // AssetCreator
             default: {
-                // Byte fields not in struct (UnitName, Name, URL, MetadataHash)
-                uint32_t len = (field == 6) ? 32 : 8;
-                stack_push(s, sv_nondet_bytes(len));
+                pushint(s, nondet_uint64());
                 break;
             }
         }
@@ -2387,7 +2389,6 @@ void bmath_add_impl(const uint8_t* a, uint8_t alen,
     bmath_strip_zeros(out, outlen);
 }
 
-// Subtract b from a (a >= b). out must have space for alen bytes.
 void bmath_sub_impl(const uint8_t* a, uint8_t alen,
                             const uint8_t* b, uint8_t blen,
                             uint8_t* out, uint8_t& outlen) {

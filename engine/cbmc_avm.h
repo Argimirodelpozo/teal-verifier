@@ -777,6 +777,13 @@ struct AssetParams {
     uint8_t freeze[32];
     uint8_t clawback[32];
     uint8_t creator[32];
+    uint8_t unit_name[8];     // AssetUnitName (max 8 bytes on Algorand)
+    uint8_t unit_name_len;
+    uint8_t name[32];         // AssetName (max 32 bytes on Algorand)
+    uint8_t name_len;
+    uint8_t url[96];          // AssetURL (max 96 bytes on Algorand)
+    uint8_t url_len;
+    uint8_t metadata_hash[32]; // AssetMetadataHash (exactly 32 bytes)
     bool active;
 };
 

@@ -288,6 +288,10 @@ inline AssetParams* bs_assume_asset_params(BlockchainState& BS, uint64_t asset_i
     _cbmc_zero(e.freeze, 32);
     _cbmc_zero(e.clawback, 32);
     _cbmc_bytecopy(e.creator, creator, 32);
+    e.unit_name_len = 0;
+    e.name_len = 0;
+    e.url_len = 0;
+    _cbmc_zero(e.metadata_hash, 32);
     aps.count++;
     return &e;
 }
