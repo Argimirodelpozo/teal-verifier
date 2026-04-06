@@ -128,8 +128,8 @@ def compile_and_verify(
     if property_only:
         verify_cmd.append("--drop-unused-functions")
         verify_cmd.extend(["--no-standard-checks", "--no-built-in-assertions"])
-        if not trace:
-            verify_cmd.append("--slice-formula")
+    if not trace:
+        verify_cmd.append("--slice-formula")
     if trace:
         verify_cmd.append("--trace")
     if solver:
