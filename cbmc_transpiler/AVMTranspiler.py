@@ -43,7 +43,12 @@ NAMED_INT_CONSTANTS = {
 
 def process_label(label: str, prefix: str = "") -> str:
     """Convert TEAL label symbols to C++-safe labels."""
-    safe = label.replace(".", "_dot_").replace("-", "_dash_").replace("@", "_at_")
+    safe = (label
+            .replace(".", "_dot_")
+            .replace("-", "_dash_")
+            .replace("@", "_at_")
+            .replace("[", "_lb_")
+            .replace("]", "_rb_"))
     return prefix + "L_" + safe
 
 
